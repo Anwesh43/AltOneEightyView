@@ -93,4 +93,49 @@ class AOELView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class AOELNode(var i : Int, val state : State = State()) {
+
+        private var next : AOELNode? = null
+
+        private var prev : AOELNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (this.i < NODES - 1) {
+                next = AOELNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawAOELNode(i, state.scale, paint)
+            next?.draw(canvas, paint)
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            state.update {
+                cb(i, it)
+            }
+        }
+
+        fun startUpdating(startcb : () -> Unit) {
+            state.startUpdating(startcb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : AOELNode {
+            var curr : AOELNode? = next
+            if (dir == -1) {
+                curr = prev
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+    }
 }
