@@ -161,6 +161,28 @@ class AOELView(ctx : Context) : View(ctx) {
         fun startUpdating(startcb : () -> Unit) {
             curr.startUpdating(startcb)
         }
-        
+    }
+
+    data class Renderer(var view : AOELView) {
+
+        private val animator : Animator = Animator(view)
+
+        private val laoel : LinkedAOEL = LinkedAOEL(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            laoel.draw(canvas, paint)
+            animator.animate {
+                laoel.update {i, scale ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            laoel.startUpdating {
+                animator.start()
+            }
+        }
     }
 }
