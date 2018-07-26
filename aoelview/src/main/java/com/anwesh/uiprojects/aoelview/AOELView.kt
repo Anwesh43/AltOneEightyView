@@ -4,6 +4,7 @@ package com.anwesh.uiprojects.aoelview
  * Created by anweshmishra on 27/07/18.
  */
 
+import android.app.Activity
 import android.view.View
 import android.view.MotionEvent
 import android.content.Context
@@ -185,6 +186,14 @@ class AOELView(ctx : Context) : View(ctx) {
             laoel.startUpdating {
                 animator.start()
             }
+        }
+    }
+    
+    companion object {
+        fun create(activity : Activity) : AOELView{
+            val view : AOELView = AOELView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
