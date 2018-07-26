@@ -24,7 +24,7 @@ fun Canvas.drawAOELNode(i : Int, scale : Float, paint : Paint) {
     val sc1 : Float = Math.min(0.5f, scale) * 2
     val sc2 : Float = Math.min(0.5f, Math.max(0f, scale - 0.5f)) * 2
     save()
-    translate(i * gap + gap * scale, h/2)
+    translate(i * gap + gap * sc1 + gap / 2, h/2)
     rotate(180f * (i % 2) + 180f * (1 - 2 * (i % 2)) * sc2)
     drawLine(-gap/5, gap/5, gap/5, gap/5, paint)
     restore()
@@ -188,7 +188,7 @@ class AOELView(ctx : Context) : View(ctx) {
             }
         }
     }
-    
+
     companion object {
         fun create(activity : Activity) : AOELView{
             val view : AOELView = AOELView(activity)
