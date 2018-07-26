@@ -8,9 +8,26 @@ import android.view.View
 import android.view.MotionEvent
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 
 val NODES : Int = 5
+
+fun Canvas.drawAOELNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = Math.min(w, h) / NODES
+    paint.color = Color.parseColor("#3498db")
+    paint.strokeWidth = gap / 12
+    paint.strokeCap = Paint.Cap.ROUND
+    val sc1 : Float = Math.min(0.5f, scale) * 2
+    val sc2 : Float = Math.min(0.5f, Math.max(0f, scale - 0.5f)) * 2
+    save()
+    translate(i * gap + gap * scale, h/2)
+    rotate(180f * (i % 2) + 180f * (1 - 2 * (i % 2)) * sc2)
+    drawLine(-gap/5, gap/5, gap/5, gap/5, paint)
+    restore()
+}
 
 class AOELView(ctx : Context) : View(ctx) {
 
