@@ -34,7 +34,13 @@ class AOELView(ctx : Context) : View(ctx) {
 
     val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
+    var onAnimationCompleteListener : OnAnimationCompleteListener? = null
+
     private val renderer : Renderer = Renderer(this)
+
+    fun addOnAnimationCompleteListener(onComplete: (Int) -> Unit, onReset: (Int) -> Unit) {
+        onAnimationCompleteListener = OnAnimationCompleteListener(onComplete, onReset)
+    }
 
     override fun onDraw(canvas : Canvas) {
         renderer.render(canvas, paint)
@@ -178,6 +184,10 @@ class AOELView(ctx : Context) : View(ctx) {
             animator.animate {
                 laoel.update {i, scale ->
                     animator.stop()
+                    when(scale) {
+                        0f -> view.onAnimationCompleteListener?.onReset?.invoke(i)
+                        1f -> view.onAnimationCompleteListener?.onComplete?.invoke(i)
+                    }
                 }
             }
         }
@@ -196,4 +206,6 @@ class AOELView(ctx : Context) : View(ctx) {
             return view
         }
     }
+
+    data class OnAnimationCompleteListener(var onComplete : (Int) -> Unit, var onReset : (Int) -> Unit)
 }
